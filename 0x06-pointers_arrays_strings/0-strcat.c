@@ -14,8 +14,6 @@ char *_strcat(char *dest, char *src)
 	{
 		c++;
 	}
-	*c = ' ';
-	c++;
 	while (*src != '\0')
 	{
 		*c = *src;
