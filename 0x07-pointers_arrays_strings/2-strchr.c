@@ -1,5 +1,5 @@
 #include "main.h"
-#include <stddef.h>
+
 /**
  * _strchr - returns pointer to 'c'
  * @s: string to check
@@ -16,5 +16,5 @@ char *_strchr(char *s, char c)
 		}
 		s++;
 	}
-	return (NULL);
+	return (void*)0;
 }
