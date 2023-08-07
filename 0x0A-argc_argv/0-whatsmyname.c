@@ -1,5 +1,10 @@
 #include "main.h"
 #include <stdio.h>
+/* Implementation of _putchar*/
+int _putchar(char c)
+{
+	return _putchar(c);
+}
 /**
  * main - prints the name of function
  * @argc: count terminal input
