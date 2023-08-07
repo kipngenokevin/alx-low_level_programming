@@ -12,7 +12,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
 
 	while (*c != '\0')
 	{
-		_putchar(*c);
+		putchar(*c);
 		c++;
 	}
 	return (0);
