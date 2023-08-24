@@ -1,4 +1,4 @@
-#include "function_pointers.h"
+#include <stdlib.h>
 /**
  * int_index - checks if array element matches
  * @array: pointer to array of int
