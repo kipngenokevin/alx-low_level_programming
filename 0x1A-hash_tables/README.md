@@ -58,7 +58,7 @@ hash_table_t *hash_table_create(unsigned long int size)
 
 	if (table == NULL)
 		return (NULL);
-	table->array = malloc(sizeof(hash_node_t) * size);
+	table->array = malloc(sizeof(hash_node_t *) * size);
 	if (table->array == NULL)
 	{
 		free(table);
@@ -68,5 +68,29 @@ hash_table_t *hash_table_create(unsigned long int size)
 	for (i = 0; i < size; i++)
 		table->array[i] = NULL;
 	return (table);
+}
+```
+
+## Hash function implementing the djb2 algorithm
+Prototype: `unsigned long int hash_djb2(const unsigned char *str);`
+
+```
+/**
+ * hash_djb2 - implementation of the djb2 algorithm
+ * @str: string used to generate hash value
+ *
+ * Return: hash value
+ */
+unsigned long int hash_djb2(const unsigned char *str)
+{
+	unsigned long int hash;
+	int c;
+
+	hash = 5381;
+	while ((c = *str++))
+	{
+		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	}
+	return (hash);
 }
 ```
