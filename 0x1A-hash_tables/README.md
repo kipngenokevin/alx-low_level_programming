@@ -73,7 +73,6 @@ hash_table_t *hash_table_create(unsigned long int size)
 
 ## Hash function implementing the djb2 algorithm
 Prototype: `unsigned long int hash_djb2(const unsigned char *str);`
-
 ```
 /**
  * hash_djb2 - implementation of the djb2 algorithm
@@ -92,5 +91,33 @@ unsigned long int hash_djb2(const unsigned char *str)
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 	}
 	return (hash);
+}
+```
+
+## Function that gives you the index of a key.
+
+Prototype: `unsigned long int key_index(const unsigned char *key, unsigned long int size);`
+* where `key` is the key
+* and `size` is the size of the array of the hash table
+
+```
+#include "hash_table.h"
+
+/**
+ * key_index - Calculates the index at which a key should be stored in the hash table.
+ * @key: The key to hash.
+ * @size: The size of the hash table array.
+ *
+ * Return: The index at which the key should be stored.
+ */
+unsigned long int key_index(const unsigned char *key, unsigned long int size)
+{
+    unsigned long int hash_value;
+
+    // Calculate the hash value using the djb2 hash function.
+    hash_value = hash_djb2(key);
+
+    // Calculate the index using the hash value and the size of the hash table.
+    return (hash_value % size);
 }
 ```
