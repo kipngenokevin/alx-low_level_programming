@@ -26,18 +26,29 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	}
 	else
 	{
-		if (strcmp(current_item->key, key) == 0)
+		while (current_item)
 		{
-			strcpy(ht->array[index]->value, value);
-			return (1);
+			if (strcmp(current_item->key, key) == 0)
+			{
+				free(current_item->value);
+				current_item->value = strdup(value);
+				if (current_item->value == NULL)
+				{
+					free(item->key);
+					free(item->value);
+					free(item);
+					return (0);
+				}
+				free(item->key);
+				free(item->value);
+				free(item);
+				return (1);
+			}
+			current_item = current_item->next;
 		}
-		else
-		{
-			handle_collision(&ht->array[index], item);
-			return (1);
-		}
+		handle_collision(&ht->array[index], item);
 	}
-	return (0);
+	return (1);
 }
 /**
  * create_hash_node - create a new instnce of hash_node
@@ -52,11 +63,15 @@ hash_node_t *create_hash_node(char *key, char *value)
 	if (new_node == NULL)
 		return (NULL);
 	new_node->key = strdup(key);
+	if (new_node->key == NULL)
+	{
+		free(new_node);
+		return (NULL);
+	}
 	new_node->value = strdup(value);
-	if (new_node->key == NULL || new_node->value == NULL)
+	if (new_node->value == NULL)
 	{
 		free(new_node->key);
-		free(new_node->value);
 		free(new_node);
 		return (NULL);
 	}
