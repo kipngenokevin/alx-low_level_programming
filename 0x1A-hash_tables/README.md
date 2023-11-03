@@ -158,18 +158,29 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	}
 	else
 	{
-		if (strcmp(current_item->key, key) == 0)
+		while (current_item)
 		{
-			strcpy(ht->array[index]->value, value);
-			return (1);
+			if (strcmp(current_item->key, key) == 0)
+			{
+				free(current_item->value);
+				current_item->value = strdup(value);
+				if (current_item->value == NULL)
+				{
+					free(item->key);
+					free(item->value);
+					free(item);
+					return (0);
+				}
+				free(item->key);
+				free(item->value);
+				free(item);
+				return (1);
+			}
+			current_item = current_item->next;
 		}
-		else
-		{
-			handle_collision(&ht->array[index], item);
-			return (1);
-		}
+		handle_collision(&ht->array[index], item);
 	}
-	return (0);
+	return (1);
 }
 /**
  * create_hash_node - create a new instnce of hash_node
@@ -184,11 +195,15 @@ hash_node_t *create_hash_node(char *key, char *value)
 	if (new_node == NULL)
 		return (NULL);
 	new_node->key = strdup(key);
+	if (new_node->key == NULL)
+	{
+		free(new_node);
+		return (NULL);
+	}
 	new_node->value = strdup(value);
-	if (new_node->key == NULL || new_node->value == NULL)
+	if (new_node->value == NULL)
 	{
 		free(new_node->key);
-		free(new_node->value);
 		free(new_node);
 		return (NULL);
 	}
@@ -286,5 +301,40 @@ void hash_table_print(const hash_table_t *ht)
 		}
 	}
 	printf("}\n");
+}
+```
+
+## Function that deletes a hash table
+Prototype: `void hash_table_delete(hash_table_t *ht);`
+* where `ht` is the hash table
+```
+#include "hash_tables.h"
+/**
+ * hash_table_delete - deletes the hash table
+ * @ht: hash table
+ * Return: void
+ */
+void hash_table_delete(hash_table_t *ht)
+{
+	unsigned int i;
+	hash_node_t *node, *current_node;
+
+	if (ht == NULL)
+		return;
+	for (i = 0; i < ht->size; i++)
+	{
+		node = ht->array[i];
+		while (node != NULL)
+		{
+			current_node = node;
+			node = node->next;
+			free(current_node->key);
+			free(current_node->value);
+			free(current_node);
+		}
+	}
+	free(ht->array);
+	free(ht);
+
 }
 ```
